@@ -1,0 +1,45 @@
+0 0 has taken a fork
+Current time: 0
+0 is eating
+Philo 0 releases fork
+200 1 has taken a fork
+Current time: 200
+1 is eating
+Philo 1 releases fork
+400 0 has taken a fork
+Current time: 400
+0 is eating
+Philo 0 releases fork
+600 2 has taken a fork
+Current time: 600
+2 is eating
+Philo 2 releases fork
+802 0 has taken a fork
+Current time: 802
+0 is eating
+Philo 0 releases fork
+1002 1 has taken a fork
+Current time: 1002
+1 is eating
+Philo 1 releases fork
+1202 2 has taken a fork
+Current time: 1202
+2 is eating
+Philo 2 releases fork
+1402 0 has taken a fork
+Current time: 1403
+0 is eating
+Philo 0 releases fork
+1603 1 has taken a fork
+Current time: 1604
+1 is eating
+Philo 1 releases fork
+1804 0 has taken a fork
+Current time: 1804
+0 is eating
+Meals eaten == Num Must Eat
+Philo 0 releases fork
+2004 2 has taken a fork
+Current time: 2004
+2 is eating
+Philo 2 releases fork

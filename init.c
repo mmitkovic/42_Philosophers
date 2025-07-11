@@ -25,6 +25,7 @@ t_table	*init_table(t_table *table, char **av)
 		table->num_must_eat = ft_atol(av[5]);
 	table->start_time = ft_time_in_ms();
 	table->simulation_should_end = 0;
+	pthread_mutex_init(&table->table_lock, NULL);
 	table->forks = malloc(table->num_of_philo * sizeof(pthread_mutex_t));
 	if (!table->forks)
 		return (NULL);
@@ -43,6 +44,7 @@ t_philo	*init_and_start_threads(t_table *table, t_philo *philo, char **av)
 	{
 		philo[i].philo_id = i;
 		philo[i].meals_eaten = 0;
+		philo[i].last_meal_eaten = table->start_time;
 		philo[i].leftFork = &table->forks[i];
 		if (i == 0)
 			philo[i].rightFork = &table->forks[table->num_of_philo - 1];

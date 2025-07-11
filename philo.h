@@ -6,7 +6,7 @@
 /*   By: mmitkovi <mmitkovi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 16:18:16 by mmitkovi          #+#    #+#             */
-/*   Updated: 2025/07/11 10:02:43 by mmitkovi         ###   ########.fr       */
+/*   Updated: 2025/07/11 15:15:34 by mmitkovi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ typedef struct s_table
 	unsigned long long	start_time;
 	int				simulation_should_end; // A flag to stop the simulation
 	/* --- Resources --- */
+	pthread_mutex_t	table_lock;
 	pthread_mutex_t	*forks; // An array of mutexes, one for each fork
 	struct s_philo	*philos;
 }	t_table;
@@ -56,7 +57,7 @@ typedef struct 	s_philo
 long	ft_atol(const char *str);
 int	check_valid_args(char **av);
 int	input_check(int ac, char **av);
-unsigned long long ft_time_in_ms(void);
+long long ft_time_in_ms(void);
 
 /* --- INIT --- */
 t_table	*init_table(t_table *table, char **av);

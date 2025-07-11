@@ -6,7 +6,7 @@
 /*   By: mmitkovi <mmitkovi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 16:18:11 by mmitkovi          #+#    #+#             */
-/*   Updated: 2025/07/11 12:10:43 by mmitkovi         ###   ########.fr       */
+/*   Updated: 2025/07/11 15:26:25 by mmitkovi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ void	philo_eats(t_philo *philo)
 	pthread_mutex_unlock(&philo->meals_lock);
 	printf("%d is eating\n", philo->philo_id);
 	fflush(stdout);
+	usleep(philo->table->time_to_eat * 1000);
 }
 void	philo_release_forks(t_philo *philo)
 {
@@ -46,6 +47,7 @@ void	philo_release_forks(t_philo *philo)
 	fflush(stdout);
 	pthread_mutex_unlock(philo->rightFork);
 	pthread_mutex_unlock(philo->leftFork);
+	usleep(philo->table->time_to_sleep * 1000);
 }
 void	*philosopher_routine(void *arg)
 {
@@ -61,8 +63,7 @@ void	*philosopher_routine(void *arg)
 			// 3. THINK: Announce that it's thinking
 			philo_eats(philo);
 			philo_release_forks(philo);
-			usleep(1000);
-			sleep(1); // helper
+			usleep(100);
 			// TODO Thinking
 		}
 	}
@@ -88,16 +89,17 @@ void	*supervisor_routine(void *arg)
 				table->simulation_should_end = 1;
 				printf("Meals eaten == Num Must Eat\n");
 			}
-			if (ft_time_in_ms() - table->philos[i].last_meal_eaten > table->time_to_die)
-			{
-				table->simulation_should_end = 1;
-				printf("Philo DIED\n");
-			}
+			// if (ft_time_in_ms() - table->philos[i].last_meal_eaten >= table->time_to_die)
+			// {
+			// 	//table->simulation_should_end = 1;
+			// 	printf("Philo: %d\n", table->philos[i].philo_id);
+			// 	printf("Philo DIED %llu\n", ft_time_in_ms() - table->philos[i].last_meal_eaten);
+			// }
 			pthread_mutex_unlock(&table->philos[i].meals_lock);
-			usleep(1000);
 			full_philos++;
 			i++;
 		}
+		usleep(100);
 		// check if all are full and sleep...
 		if (full_philos == table->num_must_eat)
 		{

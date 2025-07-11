@@ -6,7 +6,7 @@
 /*   By: mmitkovi <mmitkovi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 16:30:39 by mmitkovi          #+#    #+#             */
-/*   Updated: 2025/07/11 09:19:11 by mmitkovi         ###   ########.fr       */
+/*   Updated: 2025/07/11 15:12:35 by mmitkovi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,10 +89,10 @@ int	input_check(int ac, char **av)
 	return (0);
 }
 
-unsigned long long ft_time_in_ms(void)
+long long ft_time_in_ms(void)
 {
 	struct timeval t;
-	unsigned long long	milliseconds;
+	long long	milliseconds;
 
 	gettimeofday(&t, NULL);
 	milliseconds = t.tv_sec * 1000LL + t.tv_usec / 1000;
