@@ -6,7 +6,7 @@
 /*   By: mmitkovi <mmitkovi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 16:18:16 by mmitkovi          #+#    #+#             */
-/*   Updated: 2025/07/09 15:53:10 by mmitkovi         ###   ########.fr       */
+/*   Updated: 2025/07/11 10:02:43 by mmitkovi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,16 +24,16 @@ typedef struct s_table
 {
 	/* --- Arguments from command line --- */
 	int				num_of_philo;
-	unsigned long	time_to_die; // av[2]
-	unsigned long	time_to_eat; // av[3]
-	unsigned long	time_to_sleep; // av[4]
-	int				num_must_eat; // The optional argument
+	unsigned long	time_to_die;
+	unsigned long	time_to_eat;
+	unsigned long	time_to_sleep;
+	int				num_must_eat;
 	/* --- Simulation State --- */
+	unsigned long long	start_time;
 	int				simulation_should_end; // A flag to stop the simulation
-	pthread_mutex_t	meal_lock; // Protects access to the 'simulation_should_end' flag
 	/* --- Resources --- */
 	pthread_mutex_t	*forks; // An array of mutexes, one for each fork
-
+	struct s_philo	*philos;
 }	t_table;
 
 typedef struct 	s_philo
@@ -41,6 +41,7 @@ typedef struct 	s_philo
 	/* --- Personal Info --- */
 	int					philo_id;
 	int					meals_eaten;
+	pthread_mutex_t		meals_lock;
 	/* --- Starvation Tacking --- */
 	unsigned long		last_meal_eaten;
 	/* --- Assigned Resources --- */
@@ -53,6 +54,9 @@ typedef struct 	s_philo
 
 /* --- UTILS --- */
 long	ft_atol(const char *str);
+int	check_valid_args(char **av);
+int	input_check(int ac, char **av);
+unsigned long long ft_time_in_ms(void);
 
 /* --- INIT --- */
 t_table	*init_table(t_table *table, char **av);
@@ -61,5 +65,6 @@ void	mutex_init(t_table *table);
 
 /* --- ROUTINE --- */
 void *philosopher_routine(void *arg);
+void	*supervisor_routine(void *arg);
 
 # endif
