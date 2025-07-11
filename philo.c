@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "philo.h"
+#include <pthread.h>
 
 int	philo_gets_forks(t_philo *philo)
 {
@@ -47,7 +48,6 @@ void	philo_release_forks(t_philo *philo)
 	fflush(stdout);
 	pthread_mutex_unlock(philo->rightFork);
 	pthread_mutex_unlock(philo->leftFork);
-	usleep(philo->table->time_to_sleep * 1000);
 }
 void	*philosopher_routine(void *arg)
 {
@@ -56,15 +56,21 @@ void	*philosopher_routine(void *arg)
 	philo = (t_philo *)arg;
 	while (!philo->table->simulation_should_end)
 	{
+
+		pthread_mutex_lock(&philo->table->table_lock);
+		if (philo->table->simulation_should_end)
+		{
+			pthread_mutex_unlock(&philo->table->table_lock);
+			break ;
+		}
+		pthread_mutex_unlock(&philo->table->table_lock);
+		printf("%llu %d is thinking\n", ft_time_in_ms() - philo->table->start_time, philo->philo_id);
 		if (philo_gets_forks(philo))
 		{
-			// 1. EAT: Try to pick up forks and eat
-			// 2. SLEEP: Release the forks and sleep
-			// 3. THINK: Announce that it's thinking
 			philo_eats(philo);
 			philo_release_forks(philo);
+			usleep(philo->table->time_to_sleep * 1000);
 			usleep(100);
-			// TODO Thinking
 		}
 	}
 	return (NULL);
@@ -74,36 +80,35 @@ void	*supervisor_routine(void *arg)
 {
 	t_table	*table;
 	int		i;
-	int		full_philos = 0;
+	int		num_philos_full;
 
 	table = (t_table *)arg;
-	while (!table->simulation_should_end)
+	while (1)
 	{
 		i = 0;
+		num_philos_full = 0;
 		while (i < table->num_of_philo)
 		{
 			pthread_mutex_lock(&table->philos[i].meals_lock);
-			// check for the death and meals eaten ...
-			if (table->philos[i].meals_eaten == table->num_must_eat)
+			if (ft_time_in_ms() - table->philos[i].last_meal_eaten >= table->time_to_die)
 			{
+				pthread_mutex_lock(&table->table_lock);
 				table->simulation_should_end = 1;
-				printf("Meals eaten == Num Must Eat\n");
+				pthread_mutex_unlock(&table->table_lock);
+				printf("Philo DIED %llu\n", ft_time_in_ms() - table->philos[i].last_meal_eaten);
 			}
-			// if (ft_time_in_ms() - table->philos[i].last_meal_eaten >= table->time_to_die)
-			// {
-			// 	//table->simulation_should_end = 1;
-			// 	printf("Philo: %d\n", table->philos[i].philo_id);
-			// 	printf("Philo DIED %llu\n", ft_time_in_ms() - table->philos[i].last_meal_eaten);
-			// }
+			if (table->num_must_eat && table->philos[i].meals_eaten >= table->num_must_eat)
+				num_philos_full++;
 			pthread_mutex_unlock(&table->philos[i].meals_lock);
-			full_philos++;
 			i++;
 		}
 		usleep(100);
 		// check if all are full and sleep...
-		if (full_philos == table->num_must_eat)
+		if (table->num_must_eat > 0 && num_philos_full == table->num_of_philo)
 		{
+			pthread_mutex_lock(&table->table_lock);
 			table->simulation_should_end = 1;
+			pthread_mutex_unlock(&table->table_lock);
 		}
 	}
 	return (NULL);
