@@ -6,7 +6,7 @@
 /*   By: mmitkovi <mmitkovi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 16:18:16 by mmitkovi          #+#    #+#             */
-/*   Updated: 2025/07/11 15:15:34 by mmitkovi         ###   ########.fr       */
+/*   Updated: 2025/07/16 14:16:36 by mmitkovi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,12 +60,20 @@ int	input_check(int ac, char **av);
 long long ft_time_in_ms(void);
 
 /* --- INIT --- */
-t_table	*init_table(t_table *table, char **av);
-t_philo	*init_and_start_threads(t_table *table, t_philo *philo, char **av);
+t_table	*init_table(char **av);
+//t_philo	*init_and_start_threads(t_table *table, char **av);
 void	mutex_init(t_table *table);
+void	start_threads(t_philo *philo, t_table *table);
+t_philo	*init_philos(t_philo *philo, t_table *table);
+int	start_init(t_philo **philo, t_table **table, char **av);
 
 /* --- ROUTINE --- */
 void *philosopher_routine(void *arg);
 void	*supervisor_routine(void *arg);
+
+/* --- HELPERS --- */
+void	print_status(t_philo *philo, char *status);
+void	philo_delay(t_philo *philo, long int delay);
+void	philo_delay(t_philo *philo, long int delay);
 
 # endif

@@ -12,8 +12,10 @@ void	mutex_init(t_table *table)
 	}
 }
 
-t_table	*init_table(t_table *table, char **av)
+t_table	*init_table(char **av)
 {
+	t_table	*table;
+
 	table = (t_table *)malloc(1 * sizeof(t_table));
 	if (!table)
 		return (NULL);
@@ -31,15 +33,11 @@ t_table	*init_table(t_table *table, char **av)
 		return (NULL);
 	return (table);
 }
-
-t_philo	*init_and_start_threads(t_table *table, t_philo *philo, char **av)
+t_philo	*init_philos(t_philo *philo, t_table *table)
 {
 	int	i;
 
 	i = 0;
-	philo = malloc(table->num_of_philo * sizeof(t_philo));
-	if (!philo)
-		return (NULL);
 	while (i < table->num_of_philo)
 	{
 		philo[i].philo_id = i;
@@ -50,13 +48,34 @@ t_philo	*init_and_start_threads(t_table *table, t_philo *philo, char **av)
 			philo[i].rightFork = &table->forks[table->num_of_philo - 1];
 		else
 			philo[i].rightFork = &table->forks[i - 1];
-		pthread_mutex_init(&philo[i].meals_lock, NULL);
 		philo[i].table = table;
-		pthread_create(&philo[i].thread_handle, NULL, philosopher_routine,
-			&philo[i]);
-		usleep(100);
-			// 100ms delay to prevent philosophers from taking left fork simultaneously
+		pthread_mutex_init(&philo[i].meals_lock, NULL);
 		i++;
 	}
 	return (philo);
+}
+void	start_threads(t_philo *philo, t_table *table)
+{
+	int	i;
+
+	i = 0;
+	while (i < table->num_of_philo)
+	{
+		pthread_create(&philo[i].thread_handle, NULL, philosopher_routine, &philo[i]);
+		printf("Waiting...\n");
+		usleep(philo->philo_id * 10);
+		i++;
+	}
+}
+
+int	start_init(t_philo **philo, t_table **table, char **av)
+{
+	*philo = NULL;
+	*table = NULL;
+	*table = init_table(av);
+	*philo = malloc((*table)->num_of_philo * sizeof(t_philo));
+	if (!*philo)
+		return (1);
+	(*table)->philos = *philo;
+	return (0);
 }
