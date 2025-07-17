@@ -6,38 +6,38 @@
 /*   By: mmitkovi <mmitkovi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 16:18:16 by mmitkovi          #+#    #+#             */
-/*   Updated: 2025/07/16 14:16:36 by mmitkovi         ###   ########.fr       */
+/*   Updated: 2025/07/17 10:11:46 by mmitkovi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef	PHILO_H
+#ifndef PHILO_H
 # define PHILO_H
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdint.h>
-#include <unistd.h>
-#include <sys/time.h>
-#include <pthread.h>
+# include <pthread.h>
+# include <stdint.h>
+# include <stdio.h>
+# include <stdlib.h>
+# include <sys/time.h>
+# include <unistd.h>
 
 typedef struct s_table
 {
 	/* --- Arguments from command line --- */
-	int				num_of_philo;
-	unsigned long	time_to_die;
-	unsigned long	time_to_eat;
-	unsigned long	time_to_sleep;
-	int				num_must_eat;
+	int					num_of_philo;
+	unsigned long		time_to_die;
+	unsigned long		time_to_eat;
+	unsigned long		time_to_sleep;
+	int					num_must_eat;
 	/* --- Simulation State --- */
 	unsigned long long	start_time;
-	int				simulation_should_end; // A flag to stop the simulation
+	int simulation_should_end; // A flag to stop the simulation
 	/* --- Resources --- */
-	pthread_mutex_t	table_lock;
-	pthread_mutex_t	*forks; // An array of mutexes, one for each fork
-	struct s_philo	*philos;
-}	t_table;
+	pthread_mutex_t		table_lock;
+	pthread_mutex_t *forks; // An array of mutexes, one for each fork
+	struct s_philo		*philos;
+}						t_table;
 
-typedef struct 	s_philo
+typedef struct s_philo
 {
 	/* --- Personal Info --- */
 	int					philo_id;
@@ -46,34 +46,39 @@ typedef struct 	s_philo
 	/* --- Starvation Tacking --- */
 	unsigned long		last_meal_eaten;
 	/* --- Assigned Resources --- */
-	pthread_mutex_t					*leftFork;
-	pthread_mutex_t					*rightFork;
+	pthread_mutex_t		*leftFork;
+	pthread_mutex_t		*rightFork;
 	/* --- Thread Handle --- */
-	pthread_t	thread_handle;
-	t_table		*table;
-}				t_philo;
+	pthread_t			thread_handle;
+	t_table				*table;
+}						t_philo;
 
 /* --- UTILS --- */
-long	ft_atol(const char *str);
-int	check_valid_args(char **av);
-int	input_check(int ac, char **av);
-long long ft_time_in_ms(void);
+long					ft_atol(const char *str);
+int						check_valid_args(char **av);
+int						input_check(int ac, char **av);
+long long				ft_time_in_ms(void);
 
 /* --- INIT --- */
-t_table	*init_table(char **av);
-//t_philo	*init_and_start_threads(t_table *table, char **av);
-void	mutex_init(t_table *table);
-void	start_threads(t_philo *philo, t_table *table);
-t_philo	*init_philos(t_philo *philo, t_table *table);
-int	start_init(t_philo **philo, t_table **table, char **av);
+t_table					*init_table(char **av);
+// t_philo	*init_and_start_threads(t_table *table, char **av);
+void					mutex_init(t_table *table);
+void					start_threads(t_philo *philo, t_table *table);
+t_philo					*init_philos(t_philo *philo, t_table *table);
+int						start_init(t_philo **philo, t_table **table, char **av);
+
+/* --- ACTIONS (Mutexes) --- */
+void					philo_release_forks(t_philo *philo);
+void					philo_eats(t_philo *philo);
 
 /* --- ROUTINE --- */
-void *philosopher_routine(void *arg);
-void	*supervisor_routine(void *arg);
+void					*philosopher_routine(void *arg);
+void					*supervisor_routine(void *arg);
+int						philo_gets_forks(t_philo *philo);
 
 /* --- HELPERS --- */
-void	print_status(t_philo *philo, char *status);
-void	philo_delay(t_philo *philo, long int delay);
-void	philo_delay(t_philo *philo, long int delay);
+void					print_status(t_philo *philo, char *status);
+void philo_delay(t_table *table, unsigned long delay_duration_ms);
+int						is_simulation_over(t_philo *philo);
 
-# endif
+#endif

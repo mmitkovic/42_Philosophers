@@ -6,36 +6,11 @@
 /*   By: mmitkovi <mmitkovi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 16:18:11 by mmitkovi          #+#    #+#             */
-/*   Updated: 2025/07/16 14:26:51 by mmitkovi         ###   ########.fr       */
+/*   Updated: 2025/07/17 10:16:32 by mmitkovi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-#include <pthread.h>
-/*--- LAST PHILO PICK UP THE LEFT FORK ---*/
-// int	philo_gets_forks(t_philo *philo)
-// {
-// 	//philo->table->num_of_philo
-// 	//philo->philo_id
-// 	if (philo->philo_id == philo->table->num_of_philo - 1)
-// 	{
-// 		pthread_mutex_lock(philo->leftFork);
-// 		print_status(philo, "has taken a fork");
-// 		printf("Philo %d Waiting: %llu\n",philo->philo_id + 1, ft_time_in_ms() - philo->table->start_time);
-// 		pthread_mutex_lock(philo->rightFork);
-// 		print_status(philo, "has taken a fork");
-// 	}
-// 	else
-// 	{
-// 		/**/
-// 		pthread_mutex_lock(philo->rightFork);
-// 		print_status(philo, "has taken a fork");
-// 		printf("Philo %d Waiting: %llu\n",philo->philo_id + 1, ft_time_in_ms() - philo->table->start_time);
-// 		pthread_mutex_lock(philo->leftFork);
-// 		print_status(philo, "has taken a fork");
-// 	}
-// 	return (1);
-// }
 
 int	philo_gets_forks(t_philo *philo)
 {
@@ -61,7 +36,7 @@ void	philo_eats(t_philo *philo)
 	philo->last_meal_eaten = (unsigned long)ft_time_in_ms();
 	philo->meals_eaten++;
 	pthread_mutex_unlock(&philo->meals_lock);
-	philo_delay(philo, philo->table->time_to_eat);
+	philo_delay(philo->table, philo->table->time_to_eat);
 	//usleep(philo->table->time_to_eat * 1000);
 }
 void	philo_release_forks(t_philo *philo)
@@ -79,7 +54,7 @@ void	*philosopher_routine(void *arg)
 		print_status(philo, "is thinking");
 		philo_gets_forks(philo);
 		// pthread_mutex_lock(&philo->table->table_lock);
-		if (philo->table->simulation_should_end)
+		if (is_simulation_over(philo))
 		{
 			philo_release_forks(philo);
 			//pthread_mutex_unlock(&philo->table->table_lock);
@@ -88,7 +63,7 @@ void	*philosopher_routine(void *arg)
 		// pthread_mutex_unlock(&philo->table->table_lock);
 		print_status(philo, "is eating");
 		philo_eats(philo);
-		philo_delay(philo, philo->table->time_to_eat);
+		//philo_delay(philo, philo->table->time_to_eat);
 		philo_release_forks(philo);
 		print_status(philo, "is sleeping");
 		usleep(philo->table->time_to_sleep * 1000);
@@ -148,8 +123,8 @@ int	main(int ac, char **av)
 	t_philo				*philo;
 	t_table				*table;
 	pthread_t			supervisor;
-	unsigned long long	start_time;
-	int					i;
+	//unsigned long long	start_time;
+	int					j;
 
 	if (input_check(ac, av))
 		return (1);
@@ -159,7 +134,7 @@ int	main(int ac, char **av)
 	init_philos(philo, table);
 	start_threads(philo, table);
 	pthread_create(&supervisor, NULL, supervisor_routine, table);
-	int j = 0;
+	j = 0;
 	while (j < table->num_of_philo)
 		pthread_join(philo[j++].thread_handle, NULL);
 	pthread_join(supervisor, NULL);

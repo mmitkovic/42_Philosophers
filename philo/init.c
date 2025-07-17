@@ -63,7 +63,7 @@ void	start_threads(t_philo *philo, t_table *table)
 	{
 		pthread_create(&philo[i].thread_handle, NULL, philosopher_routine, &philo[i]);
 		printf("Waiting...\n");
-		usleep(philo->philo_id * 10);
+		usleep(philo[i].philo_id * 10);
 		i++;
 	}
 }
