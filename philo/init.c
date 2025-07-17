@@ -61,8 +61,8 @@ void	start_threads(t_philo *philo, t_table *table)
 	i = 0;
 	while (i < table->num_of_philo)
 	{
-		pthread_create(&philo[i].thread_handle, NULL, philosopher_routine, &philo[i]);
-		printf("Waiting...\n");
+		pthread_create(&philo[i].thread_handle, NULL, philosopher_routine,
+			&philo[i]);
 		usleep(philo[i].philo_id * 10);
 		i++;
 	}

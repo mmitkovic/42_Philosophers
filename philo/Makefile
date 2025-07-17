@@ -6,7 +6,7 @@
 #    By: mmitkovi <mmitkovi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/16 10:20:26 by mmitkovi          #+#    #+#              #
-#    Updated: 2025/07/17 10:33:35 by mmitkovi         ###   ########.fr        #
+#    Updated: 2025/07/17 18:21:15 by mmitkovi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,7 +27,8 @@ endif
 SRCS = philo.c \
 	   init.c \
 	   utils.c \
-	   helpers.c
+	   helpers.c \
+	   supervisor.c 
 
 # Object files directory
 OBJS_DIR = objs

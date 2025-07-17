@@ -6,7 +6,7 @@
 /*   By: mmitkovi <mmitkovi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 16:30:39 by mmitkovi          #+#    #+#             */
-/*   Updated: 2025/07/17 10:29:24 by mmitkovi         ###   ########.fr       */
+/*   Updated: 2025/07/17 19:00:42 by mmitkovi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,14 @@
 long	ft_atol(const char *str)
 {
 	long	res;
-	int	sign;
-	int	i;
+	int		sign;
+	int		i;
 
 	res = 0;
 	sign = 1;
 	i = 0;
-	while (str[i] == ' ' || str[i] == '\t' || str[i] == '\n'
-		|| str[i] == '\r' || str[i] == '\v' || str[i] == '\f')
+	while (str[i] == ' ' || str[i] == '\t' || str[i] == '\n' || str[i] == '\r'
+		|| str[i] == '\v' || str[i] == '\f')
 		i++;
 	if (str[i] == '-' || str[i] == '+')
 	{
@@ -72,7 +72,7 @@ int	input_check(int ac, char **av)
 {
 	if (ac != 5 && ac != 6)
 	{
-		printf("Usage: [num_of_philosophers] [time_to_die] [time_to_eat] [time_to_sleep]\n");
+		printf("Usage: [num_of_philosophers] [time_to_die] [time_to_eat] [time_to_sleep] [number_of_times_each_philosopher_must_eat]\n");
 		return (1);
 	}
 	if (!check_valid_args(av))
@@ -82,16 +82,16 @@ int	input_check(int ac, char **av)
 	}
 	if (ac == 6 && ft_atol(av[5]) < 1)
 	{
-		printf("Arg [number_of_times_each_philosopher_must_eat] has to be greater then 0\n");
+		printf("Last argument [number_of_times_each_philosopher_must_eat] has to be greater then 0\n");
 		return (1);
 	}
 	return (0);
 }
 
-long long ft_time_in_ms(void)
+long long	ft_time_in_ms(void)
 {
-	struct timeval t;
-	long long	milliseconds;
+	struct timeval	t;
+	long long		milliseconds;
 
 	gettimeofday(&t, NULL);
 	milliseconds = t.tv_sec * 1000LL + t.tv_usec / 1000;

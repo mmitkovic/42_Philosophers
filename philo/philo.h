@@ -6,7 +6,7 @@
 /*   By: mmitkovi <mmitkovi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 16:18:16 by mmitkovi          #+#    #+#             */
-/*   Updated: 2025/07/17 10:11:46 by mmitkovi         ###   ########.fr       */
+/*   Updated: 2025/07/17 19:07:58 by mmitkovi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,12 @@ int						philo_gets_forks(t_philo *philo);
 
 /* --- HELPERS --- */
 void					print_status(t_philo *philo, char *status);
-void philo_delay(t_table *table, unsigned long delay_duration_ms);
+void					philo_delay(t_table *table,
+							unsigned long delay_duration_ms);
 int						is_simulation_over(t_philo *philo);
+
+/* --- SUPERVISOR --- */
+int	check_starvation(t_table *table, int i);
+int	philos_full(t_table *table, int	all_philos_are_full, int i);
 
 #endif
