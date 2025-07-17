@@ -6,54 +6,68 @@
 #    By: mmitkovi <mmitkovi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/16 10:20:26 by mmitkovi          #+#    #+#              #
-#    Updated: 2025/07/17 09:56:30 by mmitkovi         ###   ########.fr        #
+#    Updated: 2025/07/17 10:33:35 by mmitkovi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-CC = cc
-CFLAGS = -Wall -Wextra -Werror -g
-
-SRCS = helpers.c \
-		init.c \
-		philo.c \
-		utils.c \
-#SRC = ./src/init_philos.c ./src/simulation.c
-
-#UTILOBJS = $(patsubst %.c, ./objs/%.o, $(notdir $(UTILS)))
-SRCS_OBJS = $(patsubst %.c, ./objs/%.o, $(notdir $(SRCS)))
-OBJS = $(SRC_OBJS)
-
-LIBR = philo.a
-
+# Executable name
 NAME = philo
 
-./objs/%.o: %.c
-	@mkdir -p objs
-	@$(CC) $(CFLAGS) -c $< -o $@
+# Compiler and flags
+CC = cc
+# The -pthread flag is required for compiling and linking with the POSIX threads library.
+CFLAGS = -Wall -Wextra -Werror -pthread
 
-#./objs/%.o: ./src/%.c
-#	@mkdir -p objs
-#	@$(CC) $(CFLAGS) -c $< -o $@
+# Add -g flag for debug builds
+ifeq ($(DEBUG), 1)
+	CFLAGS += -g
+endif
 
-$(NAME): $(LIBR)
-	@$(CC) $(CFLAGS) philo.c objs/$(LIBR) -o $(NAME) -lc
-	@echo "Build complete"
+# Source files
+SRCS = philo.c \
+	   init.c \
+	   utils.c \
+	   helpers.c
 
+# Object files directory
+OBJS_DIR = objs
+
+# Generate object file names from source files, placing them in the object directory
+# e.g., 'philo.c' becomes 'objs/philo.o'
+OBJS = $(patsubst %.c, $(OBJS_DIR)/%.o, $(SRCS))
+
+# Default rule, executed when you just run `make`
 all: $(NAME)
 
-$(LIBR): $(OBJS)
-	@ar rcs objs/$(LIBR) $(OBJS)
+# Rule to link the final executable from all object files
+$(NAME): $(OBJS)
+	@echo "Linking..."
+	@$(CC) $(CFLAGS) -o $(NAME) $(OBJS)
+	@echo "$(NAME) created successfully!"
 
+# Rule to compile .c source files into .o object files.
+# This also depends on philo.h, so changing the header recompiles the sources.
+$(OBJS_DIR)/%.o: %.c philo.h
+	@mkdir -p $(OBJS_DIR)
+	@echo "Compiling $<..."
+	@$(CC) $(CFLAGS) -c $< -o $@
+
+# Rule to remove object files
 clean:
-	@rm -f $(OBJS)
-	@echo "Clean complete"
+	@echo "Cleaning object files..."
+	@rm -rf $(OBJS_DIR)
 
+# Rule to remove object files and the final executable
 fclean: clean
-	@rm -f ./objs/$(LIBR)
+	@echo "Cleaning executable..."
 	@rm -f $(NAME)
-	@rm -d objs
-	@echo "Full clean complete"
 
-re: fclean $(NAME)
+# Rule to rebuild the project from scratch
+re: fclean all
 
-.PHONY: all clean fclean re
+# A bonus rule to compile with debug flags (`make debug`)
+debug:
+	@$(MAKE) all DEBUG=1
+
+# Declare rules that do not correspond to files
+.PHONY: all clean fclean re debug

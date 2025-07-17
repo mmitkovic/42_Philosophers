@@ -6,7 +6,7 @@
 /*   By: mmitkovi <mmitkovi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 16:30:39 by mmitkovi          #+#    #+#             */
-/*   Updated: 2025/07/11 15:12:35 by mmitkovi         ###   ########.fr       */
+/*   Updated: 2025/07/17 10:29:24 by mmitkovi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,6 @@ int	check_valid_args(char **av)
 {
 	char	**args;
 	int		i;
-	int		j;
 
 	args = av;
 	i = 1;
