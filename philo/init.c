@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   init.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mmitkovi <mmitkovi@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/18 14:25:58 by mmitkovi          #+#    #+#             */
+/*   Updated: 2025/07/18 14:29:25 by mmitkovi         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo.h"
 
 void	mutex_init(t_table *table)
@@ -33,6 +45,7 @@ t_table	*init_table(char **av)
 		return (NULL);
 	return (table);
 }
+
 t_philo	*init_philos(t_philo *philo, t_table *table)
 {
 	int	i;
@@ -43,17 +56,18 @@ t_philo	*init_philos(t_philo *philo, t_table *table)
 		philo[i].philo_id = i;
 		philo[i].meals_eaten = 0;
 		philo[i].last_meal_eaten = table->start_time;
-		philo[i].leftFork = &table->forks[i];
+		philo[i].left_fork = &table->forks[i];
 		if (i == 0)
-			philo[i].rightFork = &table->forks[table->num_of_philo - 1];
+			philo[i].right_fork = &table->forks[table->num_of_philo - 1];
 		else
-			philo[i].rightFork = &table->forks[i - 1];
+			philo[i].right_fork = &table->forks[i - 1];
 		philo[i].table = table;
 		pthread_mutex_init(&philo[i].meals_lock, NULL);
 		i++;
 	}
 	return (philo);
 }
+
 void	start_threads(t_philo *philo, t_table *table)
 {
 	int	i;

@@ -6,7 +6,7 @@
 #    By: mmitkovi <mmitkovi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/16 10:20:26 by mmitkovi          #+#    #+#              #
-#    Updated: 2025/07/17 18:21:15 by mmitkovi         ###   ########.fr        #
+#    Updated: 2025/07/18 10:34:14 by mmitkovi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ NAME = philo
 # Compiler and flags
 CC = cc
 # The -pthread flag is required for compiling and linking with the POSIX threads library.
-CFLAGS = -Wall -Wextra -Werror -pthread
+CFLAGS = -Wall -Wextra -Werror -pthread -g
 
 # Add -g flag for debug builds
 ifeq ($(DEBUG), 1)

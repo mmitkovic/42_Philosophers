@@ -6,7 +6,7 @@
 /*   By: mmitkovi <mmitkovi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 16:18:16 by mmitkovi          #+#    #+#             */
-/*   Updated: 2025/07/17 19:07:58 by mmitkovi         ###   ########.fr       */
+/*   Updated: 2025/07/18 14:27:17 by mmitkovi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,10 @@ typedef struct s_table
 	int					num_must_eat;
 	/* --- Simulation State --- */
 	unsigned long long	start_time;
-	int simulation_should_end; // A flag to stop the simulation
+	int					simulation_should_end;
 	/* --- Resources --- */
 	pthread_mutex_t		table_lock;
-	pthread_mutex_t *forks; // An array of mutexes, one for each fork
+	pthread_mutex_t		*forks;
 	struct s_philo		*philos;
 }						t_table;
 
@@ -46,8 +46,8 @@ typedef struct s_philo
 	/* --- Starvation Tacking --- */
 	unsigned long		last_meal_eaten;
 	/* --- Assigned Resources --- */
-	pthread_mutex_t		*leftFork;
-	pthread_mutex_t		*rightFork;
+	pthread_mutex_t		*left_fork;
+	pthread_mutex_t		*right_fork;
 	/* --- Thread Handle --- */
 	pthread_t			thread_handle;
 	t_table				*table;
@@ -81,9 +81,11 @@ void					print_status(t_philo *philo, char *status);
 void					philo_delay(t_table *table,
 							unsigned long delay_duration_ms);
 int						is_simulation_over(t_philo *philo);
+int						one_philo(char **av);
 
 /* --- SUPERVISOR --- */
-int	check_starvation(t_table *table, int i);
-int	philos_full(t_table *table, int	all_philos_are_full, int i);
+int						check_starvation(t_table *table, int i);
+int						philos_full(t_table *table, int all_philos_are_full,
+							int i);
 
 #endif
