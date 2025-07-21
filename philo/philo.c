@@ -6,7 +6,7 @@
 /*   By: mmitkovi <mmitkovi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 16:18:11 by mmitkovi          #+#    #+#             */
-/*   Updated: 2025/07/18 14:28:21 by mmitkovi         ###   ########.fr       */
+/*   Updated: 2025/07/18 16:54:58 by mmitkovi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,12 @@ int	philo_gets_forks(t_philo *philo)
 
 void	philo_eats(t_philo *philo)
 {
-	pthread_mutex_lock(&philo->meals_lock);
+	pthread_mutex_lock(&philo->table->table_lock);
 	philo->last_meal_eaten = (unsigned long)ft_time_in_ms();
+	pthread_mutex_unlock(&philo->table->table_lock);
+	pthread_mutex_lock(&philo->table->table_lock);
 	philo->meals_eaten++;
-	pthread_mutex_unlock(&philo->meals_lock);
+	pthread_mutex_unlock(&philo->table->table_lock);
 	philo_delay(philo->table, philo->table->time_to_eat);
 }
 
