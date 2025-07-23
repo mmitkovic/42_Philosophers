@@ -55,7 +55,7 @@ int	one_philo(char **av)
 	{
 		printf("0 1 is thinking\n");
 		usleep(100);
-		printf("1 has taken a fork\n");
+		printf("0 1 has taken a fork\n");
 		usleep(ft_atol(av[2]) * 1000);
 		printf("%s 1 died\n", av[2]);
 		return (1);
