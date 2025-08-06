@@ -6,7 +6,7 @@
 /*   By: mmitkovi <mmitkovi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 16:30:39 by mmitkovi          #+#    #+#             */
-/*   Updated: 2025/07/18 14:38:00 by mmitkovi         ###   ########.fr       */
+/*   Updated: 2025/08/06 17:12:40 by mmitkovi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,12 @@ int	input_check(int ac, char **av)
 	{
 		printf("Last argument [number_of_times_each_philosopher_must_eat]"
 			" has to be greater then 0\n");
+		return (1);
+	}
+	if (ac == 6 && ft_atol(av[5]) > INT_MAX)
+	{
+		printf("Last argument [number_of_times_each_philosopher_must_eat]"
+			" bigger than INT_MAX\n");
 		return (1);
 	}
 	return (0);
